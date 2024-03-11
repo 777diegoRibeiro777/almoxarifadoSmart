@@ -1,0 +1,66 @@
+.table-produtos {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  border: 1px solid #404040;
+  background-color: #fdfdfd;
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+
+}
+
+.table-produtos thead tr th {
+  padding: 10px;
+  text-align: center;
+  border-bottom: 1px solid #202020;
+}
+
+.table-produtos tbody tr td {
+  text-align: center;
+  padding: 10px;
+  border-bottom: 1px solid #202020;
+}
+
+.table-produtos tbody tr td img {
+  cursor: pointer;
+  transition: all 600ms ease;
+  &:hover {
+    transform: scale(1.1);
+  }
+}
+
+.icons a {
+  margin-right: 5px;
+}
+
+.btn-play {
+  background-color: aqua;
+}
+
+.modal-overlay {
+  background: rgba(0,0,0,0.75);
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  left: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal-content {
+  width: 90%;
+  max-width: 600px;
+  background-color: white;
+  padding: 10px;
+  border-radius: 5px;
+}
+
+.closeModalBtn {
+  padding: 5px;
+  font-size: large;
+  float: right;
+  cursor: pointer;
+}

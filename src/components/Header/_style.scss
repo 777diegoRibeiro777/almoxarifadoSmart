@@ -1,0 +1,28 @@
+@import "../../styles/sass/colors";
+header{
+  background-color: #15C7FF;
+  nav {
+    ul {
+      list-style: none;
+      gap: 1.3rem;
+      padding: 20px;
+  
+      li {
+        a {
+          text-decoration: none;
+          color: $white-normal;
+          font-weight: 500;
+        }
+      }
+    }
+  }
+  .btnRed {
+    margin: 15px;
+  }
+  
+  .linkSair {
+    color: white;
+  }
+}
+
+
