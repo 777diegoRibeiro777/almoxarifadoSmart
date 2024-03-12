@@ -5,14 +5,14 @@ import "./_style.scss";
 // import deleteIcon from "../../assets/Icons/icons8-remover-48.png";
 // import editIcon from "../../assets/Icons/icons8-editar-48.png";
 import CreateProductModal from "../../components/CreateProductModal";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Modal from "react-modal";
-import { API } from "../../api/API";
-import playButton from "../../assets/play.svg";
+// import { API } from "../../api/API";
+// import playButton from "../../assets/play.svg";
 import closeButton from "../../assets/close.svg";
 // import modalCloseButton from "../../assets/closeButtonCircle.svg";
 import editButton from "../../assets/edit.svg";
-import emailBlockButton from "../../assets/emailGrey.svg";
+// import emailBlockButton from "../../assets/emailGrey.svg";
 import lampBlueButton from "../../assets/lampBlue.svg";
 // import lampRedButton from "../../assets/lampRed.svg";
 import emailActiveButton from "../../assets/emailActive.svg";
@@ -24,7 +24,7 @@ export default function Produtos() {
   const [modalIsOpenDelete, setIsOpenDelete] = useState(false);
   const [modalIsOpenEdit, setIsOpenEdit] = useState(false);
   const [showModal, setShowModal] = useState(false);
-  const [products, setProducts] = useState([]);
+  // const [products, setProducts] = useState([]);
 
   function handleModalDelete() {
     setIsOpenDelete(!modalIsOpenDelete);
@@ -34,61 +34,61 @@ export default function Produtos() {
     setIsOpenEdit(!modalIsOpenEdit);
   }
 
-  useEffect(() => {
-    getProducts();
-  }, []);
-
   const handleShowModal = () => {
     setShowModal(!showModal);
   };
 
-  const getProducts = () => {
-    API.get("/Produtos").then((response) => {
-      console.log(response.data.data);
-      setProducts(response.data.data);
-    });
-  };
+  // useEffect(() => {
+  //   getProducts();
+  // }, []);
 
-  const statusEmail = (product) => {
-    if (product.branchmarking != null) {
-      if (product.branchmarking.statusEmail == 1) {
-        return 1;
-      }
-      return 0;
-    } else {
-      return 0;
-    }
-  };
+  // const getProducts = () => {
+  //   API.get("/Produtos").then((response) => {
+  //     console.log(response.data.data);
+  //     setProducts(response.data.data);
+  //   });
+  // };
 
-  const processBenchmarking = (product) => {
-    if (product.branchmarking == null) {
-      API.get("/Crawler/benchmarking/" + product.id)
-        .then((response) => {
-          console.log(response);
-          getProducts();
-        })
-        .then((error) => {
-          console.log(error);
-        });
-    } else {
-      return;
-    }
-  };
+  // const statusEmail = (product) => {
+  //   if (product.branchmarking != null) {
+  //     if (product.branchmarking.statusEmail == 1) {
+  //       return 1;
+  //     }
+  //     return 0;
+  //   } else {
+  //     return 0;
+  //   }
+  // };
 
-  const sendEmail = (product) => {
-    if (statusEmail(product) == 0) {
-      API.get(
-        `/Crawler/enviar-email/${product.id}?userEmail=lerocha644@gmail.com&userWhatsapp=null`
-      )
-        .then((response) => {
-          console.log(response);
-          getProducts();
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-    }
-  };
+  // const processBenchmarking = (product) => {
+  //   if (product.branchmarking == null) {
+  //     API.get("/Crawler/benchmarking/" + product.id)
+  //       .then((response) => {
+  //         console.log(response);
+  //         getProducts();
+  //       })
+  //       .then((error) => {
+  //         console.log(error);
+  //       });
+  //   } else {
+  //     return;
+  //   }
+  // };
+
+  // const sendEmail = (product) => {
+  //   if (statusEmail(product) == 0) {
+  //     API.get(
+  //       `/Crawler/enviar-email/${product.id}?userEmail=lerocha644@gmail.com&userWhatsapp=null`
+  //     )
+  //       .then((response) => {
+  //         console.log(response);
+  //         getProducts();
+  //       })
+  //       .catch((error) => {
+  //         console.log(error);
+  //       });
+  //   }
+  // };
 
   return (
     <>
@@ -112,7 +112,7 @@ export default function Produtos() {
             </tr>
           </thead>
           <tbody>
-            {products &&
+            {/* {products &&
               products.map((product) => (
                 <tr key={product.id}>
                   <td>{product.id}</td>
@@ -185,7 +185,7 @@ export default function Produtos() {
                     </a>
                   </td>
                 </tr>
-              ))}
+              ))} */}
             <tr>
               <td>10</td>
               <td>Resma A4</td>
