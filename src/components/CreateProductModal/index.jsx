@@ -1,9 +1,9 @@
 /* eslint-disable react/prop-types */
 import { useState } from "react";
 import "./_style.scss";
-// import { API } from "../../api/API";
+import { API } from "../../api/API";
 
-export default function CreateProductModal({ handleShowModal }) {
+export default function CreateProductModal({ handleShowModal, getProdutos }) {
   const [formData, setFormData] = useState({});
 
   const handleChange = (e) => {
@@ -26,9 +26,10 @@ export default function CreateProductModal({ handleShowModal }) {
 
     console.log("Form Data:", formData);
 
-    // API.post("/Produtos", formData).then((response) => {
-    //   console.log("Response:", response);
-    // });
+    API.post("/Produtos", formData).then((response) => {
+      console.log("Response:", response);
+      getProdutos();
+    });
 
     handleShowModal();
   };

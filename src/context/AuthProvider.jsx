@@ -11,6 +11,11 @@ export function AuthProvider({ children }) {
   const [isLoggedUser, setIsLoggedUser] = useState(initialUserData !== null);
 
   useEffect(() => {
+    const contact = {
+      email: "lerocha644@gmail.com",
+      whatsapp: "79988353265",
+    };
+    localStorage.setItem("dataContact", JSON.stringify(contact));
     if (userData) {
       setIsLoggedUser(true);
       localStorage.setItem("userData", JSON.stringify(userData));
