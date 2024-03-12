@@ -33,21 +33,11 @@ export default function Login() {
 
   return (
     <>
-      <section className="container mt-6">
-        <div className="row">
-          <div className="grid-2"></div>
-          <div
-            className="grid-8
-              container-form-login
-            "
-          >
-            <div className="flex-center"></div>
-            <h4 className="text-center">Olá, faça o login para continuar.</h4>
-            <form
-              onSubmit={(e) => handleLogin(e)}
-              className="mt-6 form-login flex-column-center"
-            >
-              <input
+      <div className="page">
+        <form onSubmit={(e) => handleLogin(e)} className="formLogin">
+            <h1 className="text-center mb-3">Login</h1>
+            <p>Digite os seus dados de acesso no campo abaixo.</p>
+            <input 
                 type="text"
                 name="user"
                 placeholder="Digite seu usuário"
@@ -55,8 +45,8 @@ export default function Login() {
                 className="search w-100"
                 autoComplete="off"
                 onChange={onChange}
-              />
-              <input
+            />
+            <input 
                 type="password"
                 name="password"
                 placeholder="Digite sua senha"
@@ -64,15 +54,12 @@ export default function Login() {
                 id="password"
                 autoComplete="off"
                 onChange={onChange}
-              />
-
-              <button type="submit" className="btn b-0 btn-login w-100 mt-3">
-                Entrar
-              </button>
-            </form>
-          </div>
-        </div>
-        <ToastContainer
+            />
+            <a href="/">Esqueci minha senha</a>
+            <input type="submit" value="Acessar" class="btn" />
+        </form>
+      </div>
+      <ToastContainer
           position="top-right"
           autoClose={5000}
           hideProgressBar={false}
@@ -84,7 +71,6 @@ export default function Login() {
           pauseOnHover
           theme="dark"
         />
-      </section>
     </>
   );
 }
