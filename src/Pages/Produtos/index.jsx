@@ -1,20 +1,20 @@
 import "./_style.scss";
 // import lampGreenIcon from "../../assets/icons/icons8-light-green.png";
 // import lampRedIcon from "../../assets/icons/icons8-light-red.png";
-import emailIcon from "../../assets/Icons/icons8-nova-mensagem-48.png";
-import deleteIcon from "../../assets/Icons/icons8-remover-48.png";
-import editIcon from "../../assets/Icons/icons8-editar-48.png";
+// import emailIcon from "../../assets/Icons/icons8-nova-mensagem-48.png";
+// import deleteIcon from "../../assets/Icons/icons8-remover-48.png";
+// import editIcon from "../../assets/Icons/icons8-editar-48.png";
 import CreateProductModal from "../../components/CreateProductModal";
 import { useEffect, useState } from "react";
 import Modal from "react-modal";
 import { API } from "../../api/API";
 import playButton from "../../assets/play.svg";
 import closeButton from "../../assets/close.svg";
-import modalCloseButton from "../../assets/closeButtonCircle.svg";
+// import modalCloseButton from "../../assets/closeButtonCircle.svg";
 import editButton from "../../assets/edit.svg";
 import emailBlockButton from "../../assets/emailGrey.svg";
 import lampBlueButton from "../../assets/lampBlue.svg";
-import lampRedButton from "../../assets/lampRed.svg";
+// import lampRedButton from "../../assets/lampRed.svg";
 import emailActiveButton from "../../assets/emailActive.svg";
 import CustomModal from "../../components/CustomModal";
 
@@ -24,7 +24,7 @@ export default function Produtos() {
   const [modalIsOpenDelete, setIsOpenDelete] = useState(false);
   const [modalIsOpenEdit, setIsOpenEdit] = useState(false);
   const [showModal, setShowModal] = useState(false);
-  //const [products, setProducts] = useState([]);
+  const [products, setProducts] = useState([]);
 
   function handleModalDelete() {
     setIsOpenDelete(!modalIsOpenDelete);
@@ -33,14 +33,61 @@ export default function Produtos() {
   function handleModalEdit() {
     setIsOpenEdit(!modalIsOpenEdit);
   }
-  // useEffect(() => {
-  //   API.get("/Produtos").then((response) => {
-  //     setProducts(response.data.data);
-  //   });
-  // });
+
+  useEffect(() => {
+    getProducts();
+  }, []);
 
   const handleShowModal = () => {
     setShowModal(!showModal);
+  };
+
+  const getProducts = () => {
+    API.get("/Produtos").then((response) => {
+      console.log(response.data.data);
+      setProducts(response.data.data);
+    });
+  };
+
+  const statusEmail = (product) => {
+    if (product.branchmarking != null) {
+      if (product.branchmarking.statusEmail == 1) {
+        return 1;
+      }
+      return 0;
+    } else {
+      return 0;
+    }
+  };
+
+  const processBenchmarking = (product) => {
+    if (product.branchmarking == null) {
+      API.get("/Crawler/benchmarking/" + product.id)
+        .then((response) => {
+          console.log(response);
+          getProducts();
+        })
+        .then((error) => {
+          console.log(error);
+        });
+    } else {
+      return;
+    }
+  };
+
+  const sendEmail = (product) => {
+    if (statusEmail(product) == 0) {
+      API.get(
+        `/Crawler/enviar-email/${product.id}?userEmail=lerocha644@gmail.com&userWhatsapp=null`
+      )
+        .then((response) => {
+          console.log(response);
+          getProducts();
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
   };
 
   return (
@@ -65,7 +112,7 @@ export default function Produtos() {
             </tr>
           </thead>
           <tbody>
-            {/* {products &&
+            {products &&
               products.map((product) => (
                 <tr key={product.id}>
                   <td>{product.id}</td>
@@ -75,20 +122,72 @@ export default function Produtos() {
                   <td>{product.estoqueMinimo}</td>
                   <td className="icons">
                     <a>
-                      <img className="icon-s btn-play" src={playIcon} alt="" />
+                      <a>
+                        <img
+                          className="icon-m"
+                          src={
+                            product.branchmarking != null
+                              ? lampBlueButton
+                              : playButton
+                          }
+                          onClick={() => processBenchmarking(product)}
+                          alt=""
+                        />
+                      </a>{" "}
                     </a>
                     <a>
-                      <img className="icon-s" src={emailIcon} alt="" />
+                      <img
+                        className="icon-m"
+                        src={
+                          statusEmail(product) == 1
+                            ? emailBlockButton
+                            : emailActiveButton
+                        }
+                        onClick={() => sendEmail(product)}
+                        alt=""
+                      />{" "}
                     </a>
                     <a>
-                      <img className="icon-s" src={editIcon} alt="" />
+                      <img
+                        className="icon-m"
+                        src={editButton}
+                        onClick={handleModalEdit}
+                        alt=""
+                      />
+                      <CustomModal
+                        isOpen={modalIsOpenEdit}
+                        onRequestClose={handleModalEdit}
+                        title="Editar Produto"
+                        content={<p>Conteúdo do modal de edição</p>}
+                      />{" "}
                     </a>
                     <a>
-                      <img className="icon-s" src={deleteIcon} alt="" />
+                      <img
+                        className="icon-m"
+                        src={closeButton}
+                        onClick={handleModalDelete}
+                        alt=""
+                      />
+                      <CustomModal
+                        isOpen={modalIsOpenDelete}
+                        onRequestClose={handleModalDelete}
+                        title="Deseja realmente excluir?"
+                        content={
+                          <div className="flex-center">
+                            <button className="btnGreen mt-2 mr-2">Sim</button>
+                            <button
+                              className="btnRed mt-2"
+                              onClick={handleModalDelete}
+                            >
+                              Não
+                            </button>
+                          </div>
+                        }
+                      />{" "}
                     </a>
                   </td>
                 </tr>
-              ))} */}
+              ))}
             <tr>
               <td>10</td>
               <td>Resma A4</td>
@@ -139,90 +238,6 @@ export default function Produtos() {
                       </div>
                     }
                   />
-                </a>
-              </td>
-            </tr>
-            <tr>
-              <td>20</td>
-              <td>Notebook HP</td>
-              <td>0</td>
-              <td>200</td>
-              <td>100</td>
-              <td className="icons">
-                <a>
-                  <img className="icon-m" src={playButton} alt="" />
-                </a>
-                <a>
-                  <img className="icon-m" src={emailBlockButton} alt="" />
-                </a>
-                <a>
-                  <img className="icon-m" src={editButton} alt="" />
-                </a>
-                <a>
-                  <img className="icon-m" src={closeButton} alt="" />
-                </a>
-              </td>
-            </tr>
-            <tr>
-              <td>30</td>
-              <td>TV Samsung 42</td>
-              <td>0</td>
-              <td>200</td>
-              <td>100</td>
-              <td className="icons">
-                <a>
-                  <img className="icon-m" src={lampBlueButton} alt="" />
-                </a>
-                <a>
-                  <img className="icon-m" src={emailActiveButton} alt="" />
-                </a>
-                <a>
-                  <img className="icon-m" src={editButton} alt="" />
-                </a>
-                <a>
-                  <img className="icon-m" src={closeButton} alt="" />
-                </a>
-              </td>
-            </tr>
-            <tr>
-              <td>40</td>
-              <td>Resma A4</td>
-              <td>0</td>
-              <td>200</td>
-              <td>100</td>
-              <td className="icons">
-                <a>
-                  <img className="icon-m" src={lampRedButton} alt="" />
-                </a>
-                <a>
-                  <img className="icon-m" src={emailBlockButton} alt="" />
-                </a>
-                <a>
-                  <img className="icon-m" src={editButton} alt="" />
-                </a>
-                <a>
-                  <img className="icon-m" src={closeButton} alt="" />
-                </a>
-              </td>
-            </tr>
-            <tr>
-              <td>50</td>
-              <td>Resma A4</td>
-              <td>0</td>
-              <td>200</td>
-              <td>100</td>
-              <td className="icons">
-                <a>
-                  <img className="icon-m" src={lampBlueButton} alt="" />
-                </a>
-                <a>
-                  <img className="icon-m" src={emailActiveButton} alt="" />
-                </a>
-                <a>
-                  <img className="icon-m" src={editButton} alt="" />
-                </a>
-                <a>
-                  <img className="icon-m" src={closeButton} alt="" />
                 </a>
               </td>
             </tr>
