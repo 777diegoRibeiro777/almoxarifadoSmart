@@ -1,24 +1,15 @@
-import React, { useState } from "react";
+/* eslint-disable react/prop-types */
+import { useState } from "react";
 import "./_style.scss";
 import { API } from "../../api/API";
-import closeButton from "../../assets/close.svg"
-import modalCloseButton from "../../assets/closeIcon.svg"
 
 export default function CreateProductModal({ handleShowModal }) {
-  const [formData, setFormData] =
-    useState (
-      {
-        id: 0,
-        descricao: "",
-        preco: 0,
-        estoqueAtual: 0,
-        estoqueMinimo: 0,
-      }
-    )
+  const [formData, setFormData] = useState({});
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({ ...prevData, [name]: value }));
+    console.log("Form Data:", formData);
   };
 
   const handleSubmit = (e) => {
@@ -26,9 +17,8 @@ export default function CreateProductModal({ handleShowModal }) {
 
     if (
       formData.descricao.trim() === "" ||
-      formData.preco <= 0 ||
-      formData.estoqueAtual < 0 ||
-      formData.estoqueMinimo < 0
+      formData.estoqueAtual <= 0 ||
+      formData.estoqueMinimo <= 0
     ) {
       alert("Preencha todos os campos obrigatórios");
       return;
@@ -36,9 +26,9 @@ export default function CreateProductModal({ handleShowModal }) {
 
     console.log("Form Data:", formData);
 
-    // API.post("/Produtos", formData).then((response) => {
-    //   console.log("Response:", response);
-    // });
+    API.post("/Produtos", formData).then((response) => {
+      console.log("Response:", response);
+    });
 
     handleShowModal();
   };
@@ -47,34 +37,36 @@ export default function CreateProductModal({ handleShowModal }) {
     <div className="container-product-modal">
       <div className="content-product-modal">
         <div className="flex-column-center">
-            <h4 className="mb-5 ">Novo Produto</h4>
+          <h4 className="mb-5 ">Novo Produto</h4>
         </div>
         <div className="">
-        <form className="form-product-modal" onSubmit={handleSubmit}>
-          <div className="flex-column-center">
-            <label htmlFor="descricao">Nome</label>
-            <input type="text" name="descricao" onChange={handleChange} />
-          </div>
-          <div className="flex-column-center">
-            <label htmlFor="estoqueAtual">Estoque Atual</label>
-            <input type="text" name="estoqueAtual" onChange={handleChange} />
-          </div>
-          <div className="flex-column-center">
-            <label htmlFor="estoqueMinimo">Estoque Mínimo</label>
-            <input type="text" name="estoqueMinimo" onChange={handleChange} />
-          </div>
-          <div className="flex-center mt-2">
-            <button type="submit" className="btnGreen w-100">
-              Salvar
-            </button>
-          </div>
-          <div className="flex-center mt-2">
-            <button type="submit" onClick={handleShowModal} className="btnRed w-100">
-              Cancelar
-            </button>
-          </div>
-        </form>
-      </div>
+          <form className="form-product-modal" onSubmit={handleSubmit}>
+            <div className="flex-column-center">
+              <label htmlFor="descricao">Nome</label>
+              <input type="text" name="descricao" onChange={handleChange} />
+            </div>
+            <div className="flex-column-center">
+              <label htmlFor="estoqueAtual">Estoque Atual</label>
+              <input type="text" name="estoqueAtual" onChange={handleChange} />
+            </div>
+            <div className="flex-column-center">
+              <label htmlFor="estoqueMinimo">Estoque Mínimo</label>
+              <input type="text" name="estoqueMinimo" onChange={handleChange} />
+            </div>
+            <div className="flex-center mt-3">
+              <button type="submit" className="btnGreen w-50 mr-2">
+                Salvar
+              </button>
+              <button
+                type="submit"
+                onClick={handleShowModal}
+                className="btnRed w-50"
+              >
+                Cancelar
+              </button>
+            </div>
+          </form>
+        </div>
       </div>
     </div>
   );
