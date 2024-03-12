@@ -8,39 +8,31 @@ import CreateProductModal from "../../components/CreateProductModal";
 import { useEffect, useState } from "react";
 import Modal from "react-modal";
 import { API } from "../../api/API";
-import playButton from "../../assets/play.svg"
-import closeButton from "../../assets/close.svg"
-import modalCloseButton from "../../assets/closeButtonCircle.svg"
-import editButton from "../../assets/edit.svg"
-import emailBlockButton from "../../assets/emailGrey.svg"
-import lampBlueButton from "../../assets/lampBlue.svg"
-import lampRedButton from "../../assets/lampRed.svg"
-import emailActiveButton from "../../assets/emailActive.svg"
+import playButton from "../../assets/play.svg";
+import closeButton from "../../assets/close.svg";
+import modalCloseButton from "../../assets/closeButtonCircle.svg";
+import editButton from "../../assets/edit.svg";
+import emailBlockButton from "../../assets/emailGrey.svg";
+import lampBlueButton from "../../assets/lampBlue.svg";
+import lampRedButton from "../../assets/lampRed.svg";
+import emailActiveButton from "../../assets/emailActive.svg";
+import CustomModal from "../../components/CustomModal";
 
-Modal.setAppElement("#root")
-
+Modal.setAppElement("#root");
 
 export default function Produtos() {
-   const [modalIsOpenDelete, setIsOpenDelete] = useState(false);
-   const [modalIsOpenEdit, setIsOpenEdit] = useState(false);  
-   const [showModal, setShowModal] = useState(false);
-   //const [products, setProducts] = useState([]);
+  const [modalIsOpenDelete, setIsOpenDelete] = useState(false);
+  const [modalIsOpenEdit, setIsOpenEdit] = useState(false);
+  const [showModal, setShowModal] = useState(false);
+  //const [products, setProducts] = useState([]);
 
-   function openModalDelete() {
-    setIsOpenDelete(true);
-   }
+  function handleModalDelete() {
+    setIsOpenDelete(!modalIsOpenDelete);
+  }
 
-   function closeModalDelete() {
-    setIsOpenDelete(false);
-   }
-
-   function openModalEdit() {
-    setIsOpenEdit(true);
-   }
-
-   function closeModalEdit() {
-    setIsOpenEdit(false);
-   }
+  function handleModalEdit() {
+    setIsOpenEdit(!modalIsOpenEdit);
+  }
   // useEffect(() => {
   //   API.get("/Produtos").then((response) => {
   //     setProducts(response.data.data);
@@ -97,147 +89,143 @@ export default function Produtos() {
                   </td>
                 </tr>
               ))} */}
-              <tr>
-                <td>10</td>
-                <td>Resma A4</td>
-                <td>0</td>
-                <td>200</td>
-                <td>100</td>
-                <td className="icons">
-
-                    <a>
-                      <img className="icon-m" src={lampBlueButton} alt="" />
-                    </a>
-                    <a>
-                      <img className="icon-m" src={emailActiveButton} alt="" />
-                    </a>
-                    <a>
-                      <img className="icon-m" src={editButton} onClick={openModalEdit} alt="" />
-                      <Modal 
-                        isOpen={modalIsOpenEdit}
-                        onRequestClose={closeModalEdit}
-                        contentLabel="Exemple Modal"
-                        overlayClassName="modal-overlay"
-                        className="modal-content" 
-                      >
-                        {/* <a>
-                          <img src={modalCloseButton} alt="botão fechar" onClick={closeModal} className="icon-m closeModalBtn" />
-                        </a> */}
-                        <h4 className="text-center textModal">edit</h4>
-                        <hr />
-
-                      </Modal>
-                    </a>
-                    <a>
-                      <img className="icon-m" src={closeButton} onClick={openModalDelete}  alt="" />
-                      <Modal 
-                        isOpen={modalIsOpenDelete}
-                        onRequestClose={closeModalDelete}
-                        contentLabel="Exemple Modal"
-                        overlayClassName="modal-overlay"
-                        className="modal-content" 
-                      >
-                        {/* <a>
-                          <img src={modalCloseButton} alt="botão fechar" onClick={closeModal} className="icon-m closeModalBtn" />
-                        </a> */}
-                        <h4 className="text-center textModal">Deseja realmente excluir</h4>
-                        <hr />
-                        <div className="flex-center">
-                          <button className="btnGreen mt-2 mr-2 ">Sim</button>
-                          <button className="btnRed mt-2 " onClick={closeModalDelete}>Não</button>
-                        </div>
-                      </Modal>
-                    </a>
-                  </td>
-              </tr>
-              <tr>
-                <td>20</td>
-                <td>Notebook HP</td>
-                <td>0</td>
-                <td>200</td>
-                <td>100</td>
-                <td className="icons">
-
-                    <a>
-                      <img className="icon-m" src={playButton} alt="" />
-                    </a>
-                    <a>
-                      <img className="icon-m" src={emailBlockButton} alt="" />
-                    </a>
-                    <a>
-                      <img className="icon-m" src={editButton} alt="" />
-                    </a>
-                    <a>
-                      <img className="icon-m" src={closeButton} alt="" />
-                    </a>
-                  </td>
-              </tr>
-              <tr>
-                <td>30</td>
-                <td>TV Samsung 42</td>
-                <td>0</td>
-                <td>200</td>
-                <td>100</td>
-                <td className="icons">
-
-                    <a>
-                      <img className="icon-m" src={lampBlueButton} alt="" />
-                    </a>
-                    <a>
-                      <img className="icon-m" src={emailActiveButton} alt="" />
-                    </a>
-                    <a>
-                      <img className="icon-m" src={editButton} alt="" />
-                    </a>
-                    <a>
-                      <img className="icon-m" src={closeButton} alt="" />
-                    </a>
-                  </td>
-              </tr>
-              <tr>
-                <td>40</td>
-                <td>Resma A4</td>
-                <td>0</td>
-                <td>200</td>
-                <td>100</td>
-                <td className="icons">
-
-                    <a>
-                      <img className="icon-m" src={lampRedButton} alt="" />
-                    </a>
-                    <a>
-                      <img className="icon-m" src={emailBlockButton} alt="" />
-                    </a>
-                    <a>
-                      <img className="icon-m" src={editButton} alt="" />
-                    </a>
-                    <a>
-                      <img className="icon-m" src={closeButton} alt="" />
-                    </a>
-                  </td>
-              </tr>
-              <tr>
-                <td>50</td>
-                <td>Resma A4</td>
-                <td>0</td>
-                <td>200</td>
-                <td>100</td>
-                <td className="icons">
-
-                    <a>
-                      <img className="icon-m" src={lampBlueButton} alt="" />
-                    </a>
-                    <a>
-                      <img className="icon-m" src={emailActiveButton} alt="" />
-                    </a>
-                    <a>
-                      <img className="icon-m" src={editButton} alt="" />
-                    </a>
-                    <a>
-                      <img className="icon-m" src={closeButton} alt="" />
-                    </a>
-                  </td>
-              </tr>
+            <tr>
+              <td>10</td>
+              <td>Resma A4</td>
+              <td>0</td>
+              <td>200</td>
+              <td>100</td>
+              <td className="icons">
+                <a>
+                  <img className="icon-m" src={lampBlueButton} alt="" />
+                </a>
+                <a>
+                  <img className="icon-m" src={emailActiveButton} alt="" />
+                </a>
+                <a>
+                  <img
+                    className="icon-m"
+                    src={editButton}
+                    onClick={handleModalEdit}
+                    alt=""
+                  />
+                  <CustomModal
+                    isOpen={modalIsOpenEdit}
+                    onRequestClose={handleModalEdit}
+                    title="Editar Produto"
+                    content={<p>Conteúdo do modal de edição</p>}
+                  />
+                </a>
+                <a>
+                  <img
+                    className="icon-m"
+                    src={closeButton}
+                    onClick={handleModalDelete}
+                    alt=""
+                  />
+                  <CustomModal
+                    isOpen={modalIsOpenDelete}
+                    onRequestClose={handleModalDelete}
+                    title="Deseja realmente excluir?"
+                    content={
+                      <div className="flex-center">
+                        <button className="btnGreen mt-2 mr-2">Sim</button>
+                        <button
+                          className="btnRed mt-2"
+                          onClick={handleModalDelete}
+                        >
+                          Não
+                        </button>
+                      </div>
+                    }
+                  />
+                </a>
+              </td>
+            </tr>
+            <tr>
+              <td>20</td>
+              <td>Notebook HP</td>
+              <td>0</td>
+              <td>200</td>
+              <td>100</td>
+              <td className="icons">
+                <a>
+                  <img className="icon-m" src={playButton} alt="" />
+                </a>
+                <a>
+                  <img className="icon-m" src={emailBlockButton} alt="" />
+                </a>
+                <a>
+                  <img className="icon-m" src={editButton} alt="" />
+                </a>
+                <a>
+                  <img className="icon-m" src={closeButton} alt="" />
+                </a>
+              </td>
+            </tr>
+            <tr>
+              <td>30</td>
+              <td>TV Samsung 42</td>
+              <td>0</td>
+              <td>200</td>
+              <td>100</td>
+              <td className="icons">
+                <a>
+                  <img className="icon-m" src={lampBlueButton} alt="" />
+                </a>
+                <a>
+                  <img className="icon-m" src={emailActiveButton} alt="" />
+                </a>
+                <a>
+                  <img className="icon-m" src={editButton} alt="" />
+                </a>
+                <a>
+                  <img className="icon-m" src={closeButton} alt="" />
+                </a>
+              </td>
+            </tr>
+            <tr>
+              <td>40</td>
+              <td>Resma A4</td>
+              <td>0</td>
+              <td>200</td>
+              <td>100</td>
+              <td className="icons">
+                <a>
+                  <img className="icon-m" src={lampRedButton} alt="" />
+                </a>
+                <a>
+                  <img className="icon-m" src={emailBlockButton} alt="" />
+                </a>
+                <a>
+                  <img className="icon-m" src={editButton} alt="" />
+                </a>
+                <a>
+                  <img className="icon-m" src={closeButton} alt="" />
+                </a>
+              </td>
+            </tr>
+            <tr>
+              <td>50</td>
+              <td>Resma A4</td>
+              <td>0</td>
+              <td>200</td>
+              <td>100</td>
+              <td className="icons">
+                <a>
+                  <img className="icon-m" src={lampBlueButton} alt="" />
+                </a>
+                <a>
+                  <img className="icon-m" src={emailActiveButton} alt="" />
+                </a>
+                <a>
+                  <img className="icon-m" src={editButton} alt="" />
+                </a>
+                <a>
+                  <img className="icon-m" src={closeButton} alt="" />
+                </a>
+              </td>
+            </tr>
           </tbody>
         </table>
         <div className="flex-center"></div>
