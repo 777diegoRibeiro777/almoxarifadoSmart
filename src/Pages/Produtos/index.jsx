@@ -122,18 +122,16 @@ export default function Produtos() {
                   <td>{product.estoqueMinimo}</td>
                   <td className="icons">
                     <a>
-                      <a>
-                        <img
-                          className="icon-m"
-                          src={
-                            product.branchmarking != null
-                              ? lampBlueButton
-                              : playButton
-                          }
-                          onClick={() => processBenchmarking(product)}
-                          alt=""
-                        />
-                      </a>{" "}
+                      <img
+                        className="icon-m"
+                        src={
+                          product.branchmarking != null
+                            ? lampBlueButton
+                            : playButton
+                        }
+                        onClick={() => processBenchmarking(product)}
+                        alt=""
+                      />
                     </a>
                     <a>
                       <img

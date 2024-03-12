@@ -1,5 +1,4 @@
 import { Routes, Route } from "react-router-dom";
-import Home from "./Pages/Home";
 import Login from "./Pages/Login";
 import Produtos from "./Pages/Produtos";
 import Beanchmarking from "./Pages/Beanchmarking";
