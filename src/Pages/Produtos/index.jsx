@@ -10,7 +10,7 @@ import Modal from "react-modal";
 import { API } from "../../api/API";
 import playButton from "../../assets/play.svg"
 import closeButton from "../../assets/close.svg"
-import modalCloseButton from "../../assets/closeIcon.svg"
+import modalCloseButton from "../../assets/closeButtonCircle.svg"
 import editButton from "../../assets/edit.svg"
 import emailBlockButton from "../../assets/emailGrey.svg"
 import lampBlueButton from "../../assets/lampBlue.svg"
@@ -21,16 +21,25 @@ Modal.setAppElement("#root")
 
 
 export default function Produtos() {
-   const [modalIsOpen, setIsOpen] = useState(false); 
+   const [modalIsOpenDelete, setIsOpenDelete] = useState(false);
+   const [modalIsOpenEdit, setIsOpenEdit] = useState(false);  
    const [showModal, setShowModal] = useState(false);
    //const [products, setProducts] = useState([]);
 
-   function openModal() {
-    setIsOpen(true);
+   function openModalDelete() {
+    setIsOpenDelete(true);
    }
 
-   function closeModal() {
-    setIsOpen(false);
+   function closeModalDelete() {
+    setIsOpenDelete(false);
+   }
+
+   function openModalEdit() {
+    setIsOpenEdit(true);
+   }
+
+   function closeModalEdit() {
+    setIsOpenEdit(false);
    }
   // useEffect(() => {
   //   API.get("/Produtos").then((response) => {
@@ -52,7 +61,6 @@ export default function Produtos() {
             Novo Produto
           </button>
         </div>
-        <p>Lista de todos os produtos cadastrados</p>
         <table className="table-produtos mt-5">
           <thead>
             <tr>
@@ -104,22 +112,39 @@ export default function Produtos() {
                       <img className="icon-m" src={emailActiveButton} alt="" />
                     </a>
                     <a>
-                      <img className="icon-m" src={editButton} alt="" />
-                    </a>
-                    <a>
-                      <img className="icon-m" src={closeButton} onClick={openModal}  alt="" />
+                      <img className="icon-m" src={editButton} onClick={openModalEdit} alt="" />
                       <Modal 
-                        isOpen={modalIsOpen}
-                        onRequestClose={closeModal}
+                        isOpen={modalIsOpenEdit}
+                        onRequestClose={closeModalEdit}
                         contentLabel="Exemple Modal"
                         overlayClassName="modal-overlay"
                         className="modal-content" 
                       >
-                        <img src={modalCloseButton} alt="botão fechar" onClick={closeModal} className="icon-m closeModalBtn" />
-                        <h4 className="text-center">Confirme que deseja excluir</h4>
+                        {/* <a>
+                          <img src={modalCloseButton} alt="botão fechar" onClick={closeModal} className="icon-m closeModalBtn" />
+                        </a> */}
+                        <h4 className="text-center textModal">edit</h4>
                         <hr />
-                        <div className="flex-column-center">
-                          <button className="btn mt-2 ">Excluir</button>
+
+                      </Modal>
+                    </a>
+                    <a>
+                      <img className="icon-m" src={closeButton} onClick={openModalDelete}  alt="" />
+                      <Modal 
+                        isOpen={modalIsOpenDelete}
+                        onRequestClose={closeModalDelete}
+                        contentLabel="Exemple Modal"
+                        overlayClassName="modal-overlay"
+                        className="modal-content" 
+                      >
+                        {/* <a>
+                          <img src={modalCloseButton} alt="botão fechar" onClick={closeModal} className="icon-m closeModalBtn" />
+                        </a> */}
+                        <h4 className="text-center textModal">Deseja realmente excluir</h4>
+                        <hr />
+                        <div className="flex-center">
+                          <button className="btnGreen mt-2 mr-2 ">Sim</button>
+                          <button className="btnRed mt-2 " onClick={closeModalDelete}>Não</button>
                         </div>
                       </Modal>
                     </a>

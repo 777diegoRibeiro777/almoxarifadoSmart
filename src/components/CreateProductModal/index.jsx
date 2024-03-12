@@ -56,10 +56,6 @@ export default function CreateProductModal({ handleShowModal }) {
             <input type="text" name="descricao" onChange={handleChange} />
           </div>
           <div className="flex-column-center">
-            <label htmlFor="preco">Preço</label>
-            <input type="text" name="preco" onChange={handleChange} />
-          </div>
-          <div className="flex-column-center">
             <label htmlFor="estoqueAtual">Estoque Atual</label>
             <input type="text" name="estoqueAtual" onChange={handleChange} />
           </div>
