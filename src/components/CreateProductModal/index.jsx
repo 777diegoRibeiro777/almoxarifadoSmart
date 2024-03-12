@@ -38,36 +38,49 @@ export default function CreateProductModal({ handleShowModal, getProdutos }) {
     <div className="container-product-modal">
       <div className="content-product-modal">
         <div className="flex-column-center">
-          <h4 className="mb-5 ">Novo Produto</h4>
+          <h4 className="mb-5 ">Cadastrar novo produto</h4>
         </div>
-        <div className="">
-          <form className="form-product-modal" onSubmit={handleSubmit}>
-            <div className="flex-column-center">
-              <label htmlFor="descricao">Nome</label>
-              <input type="text" name="descricao" onChange={handleChange} />
-            </div>
-            <div className="flex-column-center">
-              <label htmlFor="estoqueAtual">Estoque Atual</label>
-              <input type="text" name="estoqueAtual" onChange={handleChange} />
-            </div>
-            <div className="flex-column-center">
-              <label htmlFor="estoqueMinimo">Estoque Mínimo</label>
-              <input type="text" name="estoqueMinimo" onChange={handleChange} />
-            </div>
-            <div className="flex-center mt-3">
-              <button type="submit" className="btnGreen w-50 mr-2">
-                Salvar
-              </button>
-              <button
-                type="submit"
-                onClick={handleShowModal}
-                className="btnRed w-50"
-              >
-                Cancelar
-              </button>
-            </div>
-          </form>
-        </div>
+        <form className="form-product-modal" onSubmit={handleSubmit}>
+          <div className="flex-column">
+            <label htmlFor="descricao">Nome:</label>
+            <input
+              type="text"
+              placeholder="Descrição do produto"
+              name="descricao"
+              onChange={handleChange}
+            />
+          </div>
+          <div className="flex-column mt-1">
+            <label htmlFor="estoqueAtual">Estoque Atual:</label>
+            <input
+              type="text"
+              name="estoqueAtual"
+              placeholder="Estoque Atual Produto"
+              onChange={handleChange}
+            />
+          </div>
+          <div className="flex-column mt-1">
+            <label htmlFor="estoqueMinimo">Estoque Mínimo:</label>
+            <input
+              type="text"
+              name="estoqueMinimo"
+              placeholder="Estoque mínimo Produto"
+              onChange={handleChange}
+            />
+          </div>
+          <div className="flex-center mt-3">
+            <button type="submit" className="btnGreen w-25 mr-2">
+              Salvar
+            </button>
+            <button
+              type="submit"
+              onClick={handleShowModal}
+              className="btnRed w-25"
+            >
+              Cancelar
+            </button>
+          </div>
+        </form>
       </div>
     </div>
   );

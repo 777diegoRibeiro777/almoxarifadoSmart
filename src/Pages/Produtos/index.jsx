@@ -301,15 +301,21 @@ export default function Produtos() {
                     content={
                       <>
                         <form>
-                          <div className="flex-column-center">
+                          <div className="flex-column">
+                            <label htmlFor="estoqueAtual " className="mt-3">
+                              Estoque Atual:
+                            </label>
                             <input
-                              className="inputModal mt-3"
+                              className="inputModal"
                               type="estoqueAtual"
                               name="estoqueAtual"
                               id="estoqueAtual"
                               placeholder="Novo Estoque Atual"
                               onChange={handleChange}
                             />
+                            <label htmlFor="estoqueAtual">
+                              Estoque Mínimo:
+                            </label>
                             <input
                               className="inputModal"
                               type="estoqueMinimo"
@@ -396,6 +402,10 @@ export default function Produtos() {
                               placeholder="Novo Estoque Atual"
                               onChange={handleChange}
                             />
+                            <label htmlFor="estoqueAtual">
+                              Estoque Mínimo:
+                            </label>
+
                             <input
                               className="inputModal"
                               type="estoqueMinimo"
