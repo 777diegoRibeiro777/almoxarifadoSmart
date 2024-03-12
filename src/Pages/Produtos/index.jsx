@@ -210,7 +210,23 @@ export default function Produtos() {
                     isOpen={modalIsOpenEdit}
                     onRequestClose={handleModalEdit}
                     title="Editar Produto"
-                    content={<p>Conteúdo do modal de edição</p>}
+                    content={
+                      <>
+                        <div className="flex-column-center">
+                          <input className="inputModal mt-3" type="estoqueAtual" name="estoqueAtual" id="estoqueAtual" placeholder="Novo Estoque Atual"/>
+                          <input className="inputModal" type="estoqueMinimo" name="estoqueMinimo" id="estoqueMinimo" placeholder="Novo Estoque Mínimo"/>
+                        </div>
+                        <div className="flex-center">
+                        <button className="btnGreen mt-2 mr-2">Editar</button>
+                        <button
+                          className="btnRed mt-2"
+                          onClick={handleModalEdit}
+                        >
+                          Cancelar
+                        </button>
+                        </div>
+                      </>
+                    }
                   />
                 </a>
                 <a>

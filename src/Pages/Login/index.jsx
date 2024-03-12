@@ -18,7 +18,7 @@ export default function Login() {
         user: form.user,
         password: form.password,
       });
-      navigate("/produtos");
+      navigate("/");
     } else {
       toast.error("Usuário ou senha inválidos");
     }
