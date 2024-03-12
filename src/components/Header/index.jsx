@@ -1,12 +1,14 @@
 import { Link } from "react-router-dom";
 import "./_style.scss";
 import "react";
+import { useAuthContext } from "../../context/AuthContext";
 
 export default function Header() {
+  const { logoutAuthContext } = useAuthContext();
+
   return (
     <>
       <header className="flex-space-between">
-        
         <nav>
           <ul className="flex-space-between g-2">
             <li>
@@ -31,10 +33,8 @@ export default function Header() {
             </li>
           </ul>
         </nav>
-        <button className="btnSair btnRed">
-        <Link to={"/login"} className="linkSair">
+        <button onClick={logoutAuthContext} className="btnSair btnRed">
           Sair
-        </Link>
         </button>
       </header>
     </>
