@@ -13,7 +13,7 @@ import closeButton from "../../assets/close.svg";
 import editButton from "../../assets/edit.svg";
 import emailBlockButton from "../../assets/emailGrey.svg";
 import lampBlueButton from "../../assets/lampBlue.svg";
-import lampRedButton from "../../assets/lampRed.svg";
+// import lampRedButton from "../../assets/lampRed.svg";
 import emailActiveButton from "../../assets/emailActive.svg";
 import CustomModal from "../../components/CustomModal";
 import { ToastContainer, toast } from "react-toastify";
@@ -26,6 +26,7 @@ export default function Produtos() {
   const [modalIsOpenDelete, setIsOpenDelete] = useState(false);
   const [modalIsOpenEdit, setIsOpenEdit] = useState(false);
   const [modalIsOpenConfig, setModalIsOpenConfig] = useState(false);
+  const [modalIsOpenBenchmarking, setModalIsOpenBenchmarking] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [products, setProducts] = useState([]);
   const [formEdit, setFormEdit] = useState({});
@@ -96,12 +97,12 @@ export default function Produtos() {
           console.log(error);
         })
         .finally(() => {
-          console.log("passou no finally");
-
           setProcessando(false);
           setBenchmarkingInProgress(false);
         });
     } else {
+      handleModalBenchmarking();
+
       setProcessando(false);
       setBenchmarkingInProgress(false);
       return;
@@ -127,7 +128,7 @@ export default function Produtos() {
           getProducts();
         })
         .catch((error) => {
-          toast.success(
+          toast.error(
             `Error ao enviar relatório do produto ${product.descricao}`
           );
 
@@ -165,10 +166,13 @@ export default function Produtos() {
       alert("Preencha todos os campos obrigatórios");
       return;
     } else {
-      API.put("/Produtos/" + produto.id, formEdit).then((response) => {
-        console.log("Response:", response);
-        getProducts();
-      });
+      API.put("/Produtos/" + produto.id, formEdit)
+        .then((response) => {
+          console.log("Response:", response);
+          toast.success(`Produto ${produto.descricao} editado com sucesso`);
+          getProducts();
+        })
+        .catch(toast.error(`Produto ${produto.descricao} editado com sucesso`));
     }
   };
 
@@ -200,6 +204,10 @@ export default function Produtos() {
 
   const handleEmailModal = () => {
     setModalIsOpenConfig(!modalIsOpenConfig);
+  };
+
+  const handleModalBenchmarking = () => {
+    setModalIsOpenBenchmarking(!modalIsOpenBenchmarking);
   };
 
   return (
@@ -278,6 +286,7 @@ export default function Produtos() {
                       />
                     </a>
                   </td>
+
                   <CustomModal
                     isOpen={modalIsOpenConfig}
                     onRequestClose={handleEmailModal}
@@ -329,6 +338,45 @@ export default function Produtos() {
                       </>
                     }
                   />
+                  {product.branchmarking != null && (
+                    <CustomModal
+                      isOpen={modalIsOpenBenchmarking}
+                      onRequestClose={handleModalBenchmarking}
+                      title={`Relatório do produto ${product.descricao}`}
+                      content={
+                        <>
+                          <h6 className="mt-2">Loja:</h6>
+                          <span className="gray-1">
+                            {product.branchmarking.loja == 1
+                              ? "Magazine Luiza"
+                              : "Mercado Livre"}
+                          </span>
+                          <h6 className=" mt-1">Economia:</h6>
+
+                          <span className="green-normal">
+                            R${product.branchmarking.economia}
+                          </span>
+
+                          <h6 className="mt-1">Status Email:</h6>
+                          <span className="gray-1">
+                            {product.branchmarking.statusemail == 1
+                              ? "Enviado"
+                              : "Não enviado"}
+                          </span>
+
+                          <h6 className="mt-1">Link:</h6>
+                          <a
+                            className="link-produto"
+                            target="_blank"
+                            href={product.branchmarking.link}
+                          >
+                            Produto
+                          </a>
+                        </>
+                      }
+                    />
+                  )}
+
                   <CustomModal
                     isOpen={modalIsOpenEdit}
                     onRequestClose={handleModalEdit}
@@ -513,7 +561,7 @@ export default function Produtos() {
         pauseOnFocusLoss
         draggable
         pauseOnHover
-        theme="dark"
+        theme="light"
       />
     </>
   );
