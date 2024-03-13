@@ -47,7 +47,7 @@ export default function Configuracao() {
         <div className="cardProduto">
           <label htmlFor="email">Email:</label>
           <input
-            className="inputEmail"
+            className="inputEmail" 
             value={formContact.email}
             type="email"
             name="email"
@@ -58,6 +58,7 @@ export default function Configuracao() {
 
           <label htmlFor="zap">Whatsapp:</label>
           <input
+            className="inputEmail"
             type="text"
             name="whatsapp"
             id="zap"

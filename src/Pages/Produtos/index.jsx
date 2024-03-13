@@ -478,7 +478,7 @@ export default function Produtos() {
                         <form>
                           <div className="flex-column-center">
                             <input
-                              className="inputModal mt-3"
+                              className="inputEmail mt-3"
                               type="estoqueAtual"
                               name="estoqueAtual"
                               id="estoqueAtual"
@@ -490,7 +490,7 @@ export default function Produtos() {
                             </label>
 
                             <input
-                              className="inputModal"
+                              className="inputEmail"
                               type="estoqueMinimo"
                               name="estoqueMinimo"
                               id="estoqueMinimo"
