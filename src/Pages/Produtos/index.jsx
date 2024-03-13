@@ -17,6 +17,8 @@ import lampRedButton from "../../assets/lampRed.svg";
 import emailActiveButton from "../../assets/emailActive.svg";
 import CustomModal from "../../components/CustomModal";
 import { ToastContainer, toast } from "react-toastify";
+import spinner from "../../assets/spinner1.svg";
+import { validateEmail } from "../../Utils/functions";
 
 Modal.setAppElement("#root");
 
@@ -28,6 +30,9 @@ export default function Produtos() {
   const [products, setProducts] = useState([]);
   const [formEdit, setFormEdit] = useState({});
   const [formContact, setFormContact] = useState({});
+  const [processando, setProcessando] = useState(false);
+  const [BenchmarkingInProgress, setBenchmarkingInProgress] = useState(false);
+  const [benchmarkingProductId, setBenchmarkingProductId] = useState(null);
 
   function handleModalDelete() {
     setIsOpenDelete(!modalIsOpenDelete);
@@ -66,28 +71,48 @@ export default function Produtos() {
   };
 
   const processBenchmarking = (product) => {
+    console.log(processando);
+    if (processando) return;
+    setProcessando(true);
+    setBenchmarkingInProgress(true);
+    setBenchmarkingProductId(product.id);
+    getProducts();
+
     if (product.branchmarking == null) {
       API.get("/Crawler/benchmarking/" + product.id)
         .then((response) => {
-          console.log(response);
-          getProducts();
-          toast.success(
-            `Sucesso ao fazer benchmarking do produto ${product.descricao}`
-          );
+          if (response.status == 200) {
+            getProducts();
+            toast.success(
+              `Sucesso ao fazer benchmarking do produto ${product.descricao}`
+            );
+          } else {
+            toast.success(
+              `Error ao fazer benchmarking do produto ${product.descricao}`
+            );
+          }
         })
         .then((error) => {
           console.log(error);
-          toast.success(
-            `Error ao fazer benchmarking do produto ${product.descricao}`
-          );
+        })
+        .finally(() => {
+          console.log("passou no finally");
+
+          setProcessando(false);
+          setBenchmarkingInProgress(false);
         });
     } else {
+      setProcessando(false);
+      setBenchmarkingInProgress(false);
       return;
     }
   };
 
   const sendEmail = (product) => {
+    if (processando) return;
+    setProcessando(true);
     const dataContact = JSON.parse(localStorage.getItem("dataContact"));
+    console.log(product);
     console.log(dataContact);
     if (statusEmail(product) == 0) {
       API.get(
@@ -95,17 +120,22 @@ export default function Produtos() {
       )
         .then((response) => {
           console.log(response);
+
           toast.success(
-            `Sucesso ao enviar relatório para produto ${product.descricao}`
+            `Sucesso ao enviar relatório do produto ${product.descricao}`
           );
           getProducts();
         })
         .catch((error) => {
           toast.success(
-            `Error ao enviar relatório para produto ${product.descricao}`
+            `Error ao enviar relatório do produto ${product.descricao}`
           );
 
           console.log(error);
+        })
+        .finally(() => {
+          console.log("passou no finally");
+          setProcessando(false);
         });
     }
   };
@@ -149,18 +179,18 @@ export default function Produtos() {
   };
 
   const handleSubmitConfig = (produt) => {
-    // if (formContact.email.trim() === "" || formContact.whatsapp.trim() === "") {
-    //   toast.error("Preencha todos os campos");
-    //   return;
-    // }
+    if (formContact.email.trim() === "" || formContact.whatsapp.trim() === "") {
+      toast.error("Preencha todos os campos");
+      return;
+    }
 
-    // if (
-    //   // formContact.zap.length < 11 ||
-    //   // validateEmail(formContact.email) != false
-    // ) {
-    //   toast.error("Campos inválidos");
-    //   return;
-    // }
+    if (
+      formContact.whatsapp.length < 11 &&
+      validateEmail(formContact.email) != false
+    ) {
+      toast.error("Campos inválidos");
+      return;
+    }
 
     localStorage.setItem("dataContact", JSON.stringify(formContact));
 
@@ -207,7 +237,10 @@ export default function Produtos() {
                       <img
                         className="icon-m"
                         src={
-                          product.branchmarking != null
+                          BenchmarkingInProgress &&
+                          benchmarkingProductId === product.id
+                            ? spinner
+                            : product.branchmarking != null
                             ? lampBlueButton
                             : playButton
                         }
@@ -222,7 +255,9 @@ export default function Produtos() {
                             ? emailBlockButton
                             : emailActiveButton
                         }
-                        onClick={handleEmailModal}
+                        onClick={
+                          statusEmail(product) == 0 ? handleEmailModal : null
+                        }
                         alt=""
                       />{" "}
                     </a>
