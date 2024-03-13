@@ -125,7 +125,6 @@ export default function Produtos() {
           toast.success(
             `Sucesso ao enviar relatório do produto ${product.descricao}`
           );
-          getProducts();
         })
         .catch((error) => {
           toast.error(
@@ -136,6 +135,7 @@ export default function Produtos() {
         })
         .finally(() => {
           console.log("passou no finally");
+          getProducts();
           setProcessando(false);
         });
     }
@@ -359,7 +359,7 @@ export default function Produtos() {
 
                           <h6 className="mt-1">Status Email:</h6>
                           <span className="gray-1">
-                            {product.branchmarking.statusemail == 1
+                            {product.branchmarking.statusEmail == 1
                               ? "Enviado"
                               : "Não enviado"}
                           </span>
