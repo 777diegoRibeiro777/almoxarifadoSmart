@@ -70,8 +70,6 @@ export default function Configuracao() {
             Salvar
           </button>
         </div>
-
-        <FadeLoader className="spinner" color="#107055" />
       </section>
 
       <ToastContainer
