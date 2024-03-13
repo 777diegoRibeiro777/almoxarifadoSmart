@@ -44,6 +44,7 @@ export default function CreateProductModal({ handleShowModal, getProdutos }) {
           <div className="flex-column">
             <label htmlFor="descricao">Nome:</label>
             <input
+            className="inputCreateProduct"
               type="text"
               placeholder="Descrição do produto"
               name="descricao"
@@ -53,6 +54,7 @@ export default function CreateProductModal({ handleShowModal, getProdutos }) {
           <div className="flex-column mt-1">
             <label htmlFor="estoqueAtual">Estoque Atual:</label>
             <input
+            className="inputCreateProduct"
               type="text"
               name="estoqueAtual"
               placeholder="Estoque Atual Produto"
@@ -62,6 +64,7 @@ export default function CreateProductModal({ handleShowModal, getProdutos }) {
           <div className="flex-column mt-1">
             <label htmlFor="estoqueMinimo">Estoque Mínimo:</label>
             <input
+            className="inputCreateProduct"
               type="text"
               name="estoqueMinimo"
               placeholder="Estoque mínimo Produto"
