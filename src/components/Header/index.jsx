@@ -23,7 +23,7 @@ export default function Header() {
             </li>
             <li>
               <Link className="nav-link" to={"/beanchmarking"}>
-                Beachmarking Logo
+                Beachmarking Log
               </Link>
             </li>
             <li>

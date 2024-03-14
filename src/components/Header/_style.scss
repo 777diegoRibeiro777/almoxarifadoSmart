@@ -1,17 +1,17 @@
 @import "../../styles/sass/colors";
-header{
-  background-color: #15C7FF;
+header {
+  background-color: #15c7ff;
   nav {
     ul {
       list-style: none;
       gap: 1.3rem;
       padding: 20px;
-  
+
       li {
         a {
           text-decoration: none;
-          color: $white-normal;
-          font-weight: 500;
+          color: #ffffff;
+          font-weight: 400;
         }
       }
     }
@@ -19,10 +19,8 @@ header{
   .btnRed {
     margin: 15px;
   }
-  
+
   .linkSair {
     color: white;
   }
 }
-
-
