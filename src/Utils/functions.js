@@ -3,3 +3,14 @@ export function validateEmail(email) {
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   return emailRegex.test(email);
 }
+
+export function statusEmail(product) {
+  if (product.branchmarking != null) {
+    if (product.branchmarking.statusEmail == 1) {
+      return 1;
+    }
+    return 0;
+  } else {
+    return 0;
+  }
+}
