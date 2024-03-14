@@ -13,7 +13,7 @@ import closeButton from "../../assets/close.svg";
 import editButton from "../../assets/edit.svg";
 import emailBlockButton from "../../assets/emailGrey.svg";
 import lampBlueButton from "../../assets/lampBlue.svg";
-// import lampRedButton from "../../assets/lampRed.svg";
+import lampRedButton from "../../assets/lampRed.svg";
 import emailActiveButton from "../../assets/emailActive.svg";
 import CustomModal from "../../components/CustomModal";
 import { ToastContainer, toast } from "react-toastify";
@@ -118,7 +118,7 @@ export default function Produtos() {
 
     getProducts();
 
-    if (product.branchmarking == null) {
+    if (product.branchmarking == null && product.branchmarkingId != 707336527) {
       setProcessando(true);
       setBenchmarkingInProgress(true);
       setBenchmarkingProductId(product.id);
@@ -238,6 +238,20 @@ export default function Produtos() {
     setModalIsOpenBenchmarking(!modalIsOpenBenchmarking);
   };
 
+  const functionIconBenchmarking = (product) => {
+    if (BenchmarkingInProgress && benchmarkingProductId == product.id) {
+      return spinner;
+    }
+    if (product.branchmarkingId == 707336527) {
+      return lampRedButton;
+    }
+    if (product.branchmarking != null) {
+      return lampBlueButton;
+    } else {
+      return playButton;
+    }
+  };
+
   return (
     <>
       <section className=" container mt-7">
@@ -272,14 +286,7 @@ export default function Produtos() {
                     <a>
                       <img
                         className="icon-m"
-                        src={
-                          BenchmarkingInProgress &&
-                          benchmarkingProductId === product.id
-                            ? spinner
-                            : product.branchmarking != null
-                            ? lampBlueButton
-                            : playButton
-                        }
+                        src={functionIconBenchmarking(product)}
                         onClick={() => processBenchmarking(product)}
                       />
                     </a>
