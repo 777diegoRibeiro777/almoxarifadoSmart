@@ -47,7 +47,7 @@
   }
 
   .inputCreateProduct {
-    padding: 15px;
+    padding: 24px 10px;
     font-size: 14px;
     border: 1px solid #ccc;
     margin-bottom: 10px;
@@ -60,5 +60,18 @@
 
   .inputCreateProduct:focus {
     border: 1px solid #00aeff;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .container-product-modal {
+    .content-product-modal {
+      width: 90%;
+      height: auto;
+    }
+
+    button {
+      width: 100%;
+    }
   }
 }
