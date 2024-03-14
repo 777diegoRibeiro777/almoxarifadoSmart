@@ -34,14 +34,31 @@ export default function Produtos() {
   const [processando, setProcessando] = useState(false);
   const [BenchmarkingInProgress, setBenchmarkingInProgress] = useState(false);
   const [benchmarkingProductId, setBenchmarkingProductId] = useState(null);
+  const [selectedProductForEdit, setSelectedProductForEdit] = useState(null);
+  const [selectedProductForEmailModal, setSelectedProductForEmailModal] =
+    useState(null);
+  const [selectedProductForDelete, setSelectedProductForDelete] =
+    useState(null);
 
-  function handleModalDelete() {
+  function handleModalDelete(produto) {
+    console.log(produto);
     setIsOpenDelete(!modalIsOpenDelete);
+    setSelectedProductForDelete(produto);
   }
 
-  function handleModalEdit() {
+  function handleModalEdit(produto) {
+    console.log(produto);
+
     setIsOpenEdit(!modalIsOpenEdit);
+    setSelectedProductForEdit(produto);
   }
+
+  const handleEmailModal = (produto) => {
+    console.log(produto);
+
+    setModalIsOpenConfig(!modalIsOpenConfig);
+    setSelectedProductForEmailModal(produto);
+  };
 
   const handleShowModal = () => {
     setShowModal(!showModal);
@@ -71,15 +88,40 @@ export default function Produtos() {
     }
   };
 
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormEdit((prevData) => ({ ...prevData, [name]: value }));
+    console.log("Form Data:", formEdit);
+  };
+
+  const handleSubmitEdit = (produto) => {
+    if (formEdit.estoqueAtual <= 0 || formEdit.estoqueMinimo <= 0) {
+      alert("Preencha todos os campos obrigatórios");
+      return;
+    } else {
+      API.put("/Produtos/" + produto.id, formEdit)
+        .then(() => {
+          toast.success(`Sucesso ao editar produto ${produto.descricao}`);
+          handleModalEdit();
+          getProducts();
+        })
+        .catch((error) => {
+          console.log(error);
+          toast.error(`Error ao editar produto ${produto.descricao}`);
+        });
+    }
+  };
+
   const processBenchmarking = (product) => {
     console.log(processando);
     if (processando) return;
-    setProcessando(true);
-    setBenchmarkingInProgress(true);
-    setBenchmarkingProductId(product.id);
+
     getProducts();
 
     if (product.branchmarking == null) {
+      setProcessando(true);
+      setBenchmarkingInProgress(true);
+      setBenchmarkingProductId(product.id);
       API.get("/Crawler/benchmarking/" + product.id)
         .then((response) => {
           if (response.status == 200) {
@@ -97,27 +139,31 @@ export default function Produtos() {
           console.log(error);
         })
         .finally(() => {
-          setProcessando(false);
           setBenchmarkingInProgress(false);
+          setProcessando(false);
         });
     } else {
       handleModalBenchmarking();
-
-      setProcessando(false);
-      setBenchmarkingInProgress(false);
       return;
     }
   };
 
   const sendEmail = (product) => {
+    console.log(processando + "processando");
     if (processando) return;
-    setProcessando(true);
     const dataContact = JSON.parse(localStorage.getItem("dataContact"));
-    console.log(product);
-    console.log(dataContact);
-    if (statusEmail(product) == 0) {
+    console.log(product.id);
+
+    if (statusEmail(product) == 0 && product.branchmarking != null) {
+      setProcessando(true);
+
+      console.log("opa");
       API.get(
-        `/Crawler/enviar-email/${product.id}?userEmail=${dataContact.email}&userWhatsapp=${dataContact.whatsapp}`
+        `/Crawler/enviar-email/${product.id}?userEmail=${
+          dataContact.email
+        }&userWhatsapp=${
+          dataContact.whatsapp == "79988353265" ? "null" : dataContact.whatsapp
+        }`
       )
         .then((response) => {
           console.log(response);
@@ -125,19 +171,22 @@ export default function Produtos() {
           toast.success(
             `Sucesso ao enviar relatório do produto ${product.descricao}`
           );
+          getProducts();
         })
-        .catch((error) => {
+        .catch(() => {
           toast.error(
             `Error ao enviar relatório do produto ${product.descricao}`
           );
-
-          console.log(error);
         })
         .finally(() => {
           console.log("passou no finally");
-          getProducts();
           setProcessando(false);
         });
+    } else {
+      toast.warning(
+        `Confira se foi feito benchmarking para o produto ${product.descricao}`
+      );
+      setProcessando(false);
     }
   };
 
@@ -155,34 +204,13 @@ export default function Produtos() {
       });
   };
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormEdit((prevData) => ({ ...prevData, [name]: value }));
-    console.log("Form Data:", formEdit);
-  };
-
-  const handleSubmitEdit = (produto) => {
-    if (formEdit.estoqueAtual <= 0 || formEdit.estoqueMinimo <= 0) {
-      alert("Preencha todos os campos obrigatórios");
-      return;
-    } else {
-      API.put("/Produtos/" + produto.id, formEdit)
-        .then((response) => {
-          console.log("Response:", response);
-          toast.success(`Produto ${produto.descricao} editado com sucesso`);
-          getProducts();
-        })
-        .catch(toast.error(`Produto ${produto.descricao} editado com sucesso`));
-    }
-  };
-
   const handleChangeConfig = (e) => {
     const { name, value } = e.target;
     setFormContact((prevData) => ({ ...prevData, [name]: value }));
     console.log("Form Data:", formContact);
   };
 
-  const handleSubmitConfig = (produt) => {
+  const handleSubmitConfig = (product) => {
     if (formContact.email.trim() === "" || formContact.whatsapp.trim() === "") {
       toast.error("Preencha todos os campos");
       return;
@@ -196,14 +224,14 @@ export default function Produtos() {
       return;
     }
 
+    console.log("aqio");
+
     localStorage.setItem("dataContact", JSON.stringify(formContact));
 
-    sendEmail(produt);
-    handleEmailModal();
-  };
+    console.log(product.id);
+    sendEmail(product);
 
-  const handleEmailModal = () => {
-    setModalIsOpenConfig(!modalIsOpenConfig);
+    handleEmailModal();
   };
 
   const handleModalBenchmarking = () => {
@@ -225,7 +253,7 @@ export default function Produtos() {
             <tr>
               <th>Código</th>
               <th>Nome</th>
-              <th>Preço</th>
+              <th className="preco-response">Preço </th>
               <th>Estoque Atual</th>
               <th>Estoque Mínimo</th>
               <th></th>
@@ -264,7 +292,9 @@ export default function Produtos() {
                             : emailActiveButton
                         }
                         onClick={
-                          statusEmail(product) == 0 ? handleEmailModal : null
+                          statusEmail(product) == 0
+                            ? () => handleEmailModal(product)
+                            : null
                         }
                         alt=""
                       />{" "}
@@ -273,7 +303,7 @@ export default function Produtos() {
                       <img
                         className="icon-m"
                         src={editButton}
-                        onClick={handleModalEdit}
+                        onClick={() => handleModalEdit(product)}
                         alt=""
                       />
                     </a>
@@ -281,63 +311,12 @@ export default function Produtos() {
                       <img
                         className="icon-m"
                         src={closeButton}
-                        onClick={handleModalDelete}
+                        onClick={() => handleModalDelete(product)}
                         alt=""
                       />
                     </a>
                   </td>
 
-                  <CustomModal
-                    isOpen={modalIsOpenConfig}
-                    onRequestClose={handleEmailModal}
-                    title="Informe seus dados"
-                    content={
-                      <>
-                        <p className="my-1 text-center">
-                          Para receber o relatório preencha os dados abaixo
-                        </p>
-                        <div>
-                          <label htmlFor="email">Email:</label>
-                          <input
-                            className="inputEmail"
-                            value={formContact.email}
-                            type="email"
-                            name="email"
-                            id="email"
-                            placeholder="Digite seu email"
-                            onChange={handleChangeConfig}
-                          />
-                        </div>
-
-                        <div>
-                          <label htmlFor="zap">Whatsapp:</label>
-                          <input
-                            type="text"
-                            name="whatsapp"
-                            id="zap"
-                            value={formContact.whatsapp}
-                            placeholder="Digite seu whatsapp"
-                            onChange={handleChangeConfig}
-                          />
-                        </div>
-
-                        <div className="flex-center mt-2">
-                          <button
-                            className="btnGreen mr-2"
-                            onClick={() => handleSubmitConfig(product)}
-                          >
-                            Enviar
-                          </button>
-                          <button
-                            className="btnRed "
-                            onClick={handleEmailModal}
-                          >
-                            Cancelar
-                          </button>
-                        </div>
-                      </>
-                    }
-                  />
                   {product.branchmarking != null && (
                     <CustomModal
                       isOpen={modalIsOpenBenchmarking}
@@ -376,174 +355,124 @@ export default function Produtos() {
                       }
                     />
                   )}
-
-                  <CustomModal
-                    isOpen={modalIsOpenEdit}
-                    onRequestClose={handleModalEdit}
-                    title="Editar Produto"
-                    content={
-                      <>
-                        <form>
-                          <div className="flex-column">
-                            <label htmlFor="estoqueAtual " className="mt-3">
-                              Estoque Atual:
-                            </label>
-                            <input
-                              className="inputModal"
-                              type="estoqueAtual"
-                              name="estoqueAtual"
-                              id="estoqueAtual"
-                              placeholder="Novo Estoque Atual"
-                              onChange={handleChange}
-                            />
-                            <label htmlFor="estoqueAtual">
-                              Estoque Mínimo:
-                            </label>
-                            <input
-                              className="inputModal"
-                              type="estoqueMinimo"
-                              name="estoqueMinimo"
-                              id="estoqueMinimo"
-                              placeholder="Novo Estoque Mínimo"
-                              onChange={handleChange}
-                            />
-                          </div>
-                          <div className="flex-center">
-                            <button
-                              className="btnGreen mt-2 mr-2"
-                              onClick={() => handleSubmitEdit(product)}
-                            >
-                              Editar
-                            </button>
-                            <button
-                              className="btnRed mt-2"
-                              onClick={handleModalEdit}
-                            >
-                              Cancelar
-                            </button>
-                          </div>
-                        </form>
-                      </>
-                    }
-                  />
-                  <CustomModal
-                    isOpen={modalIsOpenDelete}
-                    onRequestClose={handleModalDelete}
-                    title="Deseja realmente excluir?"
-                    content={
-                      <div className="flex-center">
-                        <button
-                          className="btnGreen mt-2 mr-2"
-                          onClick={() => deleteProduto(product)}
-                        >
-                          Sim
-                        </button>
-                        <button
-                          className="btnRed mt-2"
-                          onClick={handleModalDelete}
-                        >
-                          Não
-                        </button>
-                      </div>
-                    }
-                  />
                 </tr>
               ))}
-            <tr>
-              <td>10</td>
-              <td>Resma A4</td>
-              <td>0</td>
-              <td>200</td>
-              <td>100</td>
-              <td className="icons">
-                <a>
-                  <img className="icon-m" src={lampBlueButton} alt="" />
-                </a>
-                <a>
-                  <img className="icon-m" src={emailActiveButton} alt="" />
-                </a>
-                <a>
-                  <img
-                    className="icon-m"
-                    src={editButton}
-                    onClick={handleModalEdit}
-                    alt=""
-                  />
-                  <CustomModal
-                    isOpen={modalIsOpenEdit}
-                    onRequestClose={handleModalEdit}
-                    title="Editar Produto"
-                    content={
-                      <>
-                        <form>
-                          <div className="flex-column-center">
-                            <input
-                              className="inputEmail mt-3"
-                              type="estoqueAtual"
-                              name="estoqueAtual"
-                              id="estoqueAtual"
-                              placeholder="Novo Estoque Atual"
-                              onChange={handleChange}
-                            />
-                            <label htmlFor="estoqueAtual">
-                              Estoque Mínimo:
-                            </label>
-
-                            <input
-                              className="inputEmail"
-                              type="estoqueMinimo"
-                              name="estoqueMinimo"
-                              id="estoqueMinimo"
-                              placeholder="Novo Estoque Mínimo"
-                              onChange={handleChange}
-                            />
-                          </div>
-                          <div className="flex-center">
-                            <button className="btnGreen mt-2 mr-2">
-                              Editar
-                            </button>
-                            <button
-                              className="btnRed mt-2"
-                              onClick={handleModalEdit}
-                            >
-                              Cancelar
-                            </button>
-                          </div>
-                        </form>
-                      </>
-                    }
-                  />
-                </a>
-                <a>
-                  <img
-                    className="icon-m"
-                    src={closeButton}
-                    onClick={handleModalDelete}
-                    alt=""
-                  />
-                  <CustomModal
-                    isOpen={modalIsOpenDelete}
-                    onRequestClose={handleModalDelete}
-                    title="Deseja realmente excluir?"
-                    content={
-                      <div className="flex-center">
-                        <button className="btnGreen mt-2 mr-2">Sim</button>
-                        <button
-                          className="btnRed mt-2"
-                          onClick={handleModalDelete}
-                        >
-                          Não
-                        </button>
-                      </div>
-                    }
-                  />
-                </a>
-              </td>
-            </tr>
           </tbody>
         </table>
         <div className="flex-center"></div>
       </section>
+
+      <CustomModal
+        isOpen={modalIsOpenConfig}
+        onRequestClose={handleEmailModal}
+        title="Informe seus dados"
+        content={
+          <>
+            <p className="my-1 text-center">
+              Para receber o relatório preencha os dados abaixo
+            </p>
+            <div>
+              <label htmlFor="email">Email:</label>
+              <input
+                className="inputEmail"
+                value={formContact.email}
+                type="email"
+                name="email"
+                id="email"
+                placeholder="Digite seu email"
+                onChange={handleChangeConfig}
+              />
+            </div>
+
+            <div>
+              <label htmlFor="zap">Whatsapp:</label>
+              <input
+                type="text"
+                name="whatsapp"
+                className="inputEmail"
+                id="zap"
+                value={formContact.whatsapp}
+                placeholder="Digite seu whatsapp"
+                onChange={handleChangeConfig}
+              />
+            </div>
+
+            <div className="flex-center mt-2">
+              <button
+                className="btnGreen mr-2"
+                onClick={() => handleSubmitConfig(selectedProductForEmailModal)}
+              >
+                Enviar
+              </button>
+              <button className="btnRed " onClick={() => handleEmailModal()}>
+                Cancelar
+              </button>
+            </div>
+          </>
+        }
+      />
+
+      <CustomModal
+        isOpen={modalIsOpenEdit}
+        onRequestClose={handleModalEdit}
+        title="Editar Produto"
+        content={
+          <>
+            <div className="flex-column">
+              <label htmlFor="estoqueAtual " className="mt-3">
+                Estoque Atual:
+              </label>
+              <input
+                className="inputModal"
+                type="estoqueAtual"
+                name="estoqueAtual"
+                id="estoqueAtual"
+                placeholder="Novo Estoque Atual"
+                onChange={handleChange}
+              />
+              <label htmlFor="estoqueAtual">Estoque Mínimo:</label>
+              <input
+                className="inputModal"
+                type="estoqueMinimo"
+                name="estoqueMinimo"
+                id="estoqueMinimo"
+                placeholder="Novo Estoque Mínimo"
+                onChange={handleChange}
+              />
+            </div>
+            <div className="flex-center">
+              <button
+                className="btnGreen mt-2 mr-2"
+                onClick={() => handleSubmitEdit(selectedProductForEdit)}
+              >
+                Editar
+              </button>
+              <button className="btnRed mt-2" onClick={() => handleModalEdit()}>
+                Cancelar
+              </button>
+            </div>
+          </>
+        }
+      />
+
+      <CustomModal
+        isOpen={modalIsOpenDelete}
+        onRequestClose={handleModalDelete}
+        title="Deseja realmente excluir?"
+        content={
+          <div className="flex-center">
+            <button
+              className="btnGreen mt-2 mr-2"
+              onClick={() => deleteProduto(selectedProductForDelete)}
+            >
+              Sim
+            </button>
+            <button className="btnRed mt-2" onClick={() => handleModalDelete()}>
+              Não
+            </button>
+          </div>
+        }
+      />
       {showModal && (
         <CreateProductModal
           handleShowModal={handleShowModal}
