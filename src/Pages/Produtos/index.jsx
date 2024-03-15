@@ -162,7 +162,7 @@ export default function Produtos() {
         `/Crawler/enviar-email/${product.id}?userEmail=${
           dataContact.email
         }&userWhatsapp=${
-          dataContact.whatsapp == "79988353265" ? "null" : dataContact.whatsapp
+          dataContact.whatsapp === "79988353265" ? "null" : dataContact.whatsapp
         }`
       )
         .then((response) => {
