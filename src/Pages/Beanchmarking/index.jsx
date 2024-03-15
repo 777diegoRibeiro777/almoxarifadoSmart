@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import "./_style.scss";
 import { API } from "../../api/API";
 import { Pagination, Select } from "antd";
-import { Option } from "antd/es/mentions";
 
 export default function Beanchmarking() {
   const [logs, setLogs] = useState([]);
@@ -42,9 +41,9 @@ export default function Beanchmarking() {
             style={{ width: 120 }}
             onChange={handleFilter}
           >
-            <Option value="Selecione">Selecione</Option>
-            <Option value="Sucesso">Sucesso</Option>
-            <Option value="Falha">Falha</Option>
+            <Select.Option value="Selecione">Selecione</Select.Option>
+            <Select.Option value="Sucesso">Sucesso</Select.Option>
+            <Select.Option value="Falha">Falha</Select.Option>
           </Select>
         </div>
         <table className="table-produtos rounded">

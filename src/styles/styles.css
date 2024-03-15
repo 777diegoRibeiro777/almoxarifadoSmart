@@ -19,6 +19,10 @@
   color: #3e3f40;
 }
 
+.green-normal {
+  color: #00b47b;
+}
+
 .primary-color {
   color: #252b42;
 }
@@ -29,6 +33,10 @@
 
 .gray-1 {
   color: #3e3f40;
+}
+
+.green-normal {
+  color: #00b47b;
 }
 
 .grid-1 {
@@ -456,6 +464,10 @@
   color: #3e3f40;
 }
 
+.green-normal {
+  color: #00b47b;
+}
+
 .h0 {
   font-family: "Rubik", sans-serif;
   font-size: 120px;
@@ -795,7 +807,7 @@ b {
 }
 
 .text-center {
-  text-align: center;
+  text-align: center !important;
 }
 
 .text-left {
@@ -877,6 +889,10 @@ a {
 
 .gray-1 {
   color: #3e3f40;
+}
+
+.green-normal {
+  color: #00b47b;
 }
 
 .grid-1 {
@@ -1926,6 +1942,20 @@ a {
   transform: translate(0, -4px, 0);
 }
 
+.icon-m {
+  max-width: 43px;
+  max-height: 36px;
+  transition: 0.5s ease;
+}
+@media screen and (max-width: 960px) {
+  .icon-m {
+    max-width: 28px;
+  }
+}
+.icon-m:hover {
+  transform: translate(0, -4px, 0);
+}
+
 .icon-s {
   max-width: 32px;
   transition: 0.5s ease;
@@ -1997,6 +2027,10 @@ a {
   color: #3e3f40;
 }
 
+.green-normal {
+  color: #00b47b;
+}
+
 .btn {
   display: inline-block;
   color: #fafcfc;
@@ -2009,6 +2043,36 @@ a {
   font-weight: 500;
 }
 .btn:hover {
+  transform: scale(1.05);
+}
+
+.btnGreen {
+  display: inline-block;
+  color: #fafcfc;
+  padding: 8px 24px;
+  background: #0bb07b;
+  border-radius: 4px;
+  cursor: pointer;
+  border: 0;
+  transition: all 600ms ease;
+  font-weight: 500;
+}
+.btnGreen:hover {
+  transform: scale(1.05);
+}
+
+.btnRed {
+  display: inline-block;
+  color: #fafcfc;
+  padding: 8px 24px;
+  background: #d03333;
+  border-radius: 4px;
+  cursor: pointer;
+  border: 0;
+  transition: all 600ms ease;
+  font-weight: 500;
+}
+.btnRed:hover {
   transform: scale(1.05);
 }
 
@@ -2055,7 +2119,7 @@ textarea {
   padding: 10px 12px;
   background-color: #fafcfc;
   border-radius: 8px;
-  border: 1px solid #050607;
+  border: 1px solid #747474;
   width: 100%;
   color: #050607;
   font-family: "Rubik", sans-serif;
