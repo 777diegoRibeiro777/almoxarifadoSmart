@@ -29,8 +29,6 @@ export default function Login() {
     setForm({ ...form, [name]: value });
   }
 
-  console.log(form);
-
   return (
     <>
       <div className="page">
@@ -69,7 +67,7 @@ export default function Login() {
         pauseOnFocusLoss
         draggable
         pauseOnHover
-        theme="dark"
+        theme="light"
       />
     </>
   );

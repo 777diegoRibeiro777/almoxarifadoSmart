@@ -9,7 +9,6 @@ export default function CreateProductModal({ handleShowModal, getProdutos }) {
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({ ...prevData, [name]: value }));
-    console.log("Form Data:", formData);
   };
 
   const handleSubmit = (e) => {
@@ -24,10 +23,7 @@ export default function CreateProductModal({ handleShowModal, getProdutos }) {
       return;
     }
 
-    console.log("Form Data:", formData);
-
-    API.post("/Produtos", formData).then((response) => {
-      console.log("Response:", response);
+    API.post("/Produtos", formData).then(() => {
       getProdutos();
     });
 
@@ -44,7 +40,7 @@ export default function CreateProductModal({ handleShowModal, getProdutos }) {
           <div className="flex-column">
             <label htmlFor="descricao">Nome:</label>
             <input
-            className="inputCreateProduct"
+              className="inputCreateProduct"
               type="text"
               placeholder="Descrição do produto"
               name="descricao"
@@ -54,7 +50,7 @@ export default function CreateProductModal({ handleShowModal, getProdutos }) {
           <div className="flex-column mt-1">
             <label htmlFor="estoqueAtual">Estoque Atual:</label>
             <input
-            className="inputCreateProduct"
+              className="inputCreateProduct"
               type="text"
               name="estoqueAtual"
               placeholder="Estoque Atual Produto"
@@ -64,7 +60,7 @@ export default function CreateProductModal({ handleShowModal, getProdutos }) {
           <div className="flex-column mt-1">
             <label htmlFor="estoqueMinimo">Estoque Mínimo:</label>
             <input
-            className="inputCreateProduct"
+              className="inputCreateProduct"
               type="text"
               name="estoqueMinimo"
               placeholder="Estoque mínimo Produto"

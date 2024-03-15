@@ -1,8 +1,6 @@
 import "./_style.scss";
 import { useEffect, useState } from "react";
-import { FadeLoader } from "react-spinners";
 import { ToastContainer, toast } from "react-toastify";
-import { validateEmail } from "../../Utils/functions";
 
 export default function Configuracao() {
   const [formContact, setFormContact] = useState({});
@@ -10,13 +8,11 @@ export default function Configuracao() {
   useEffect(() => {
     const dataContact = JSON.parse(localStorage.getItem("dataContact"));
     setFormContact(dataContact);
-    console.log("Data Contact:", dataContact);
   }, []);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormContact((prevData) => ({ ...prevData, [name]: value }));
-    console.log("Form Data:", formContact);
   };
 
   const handleSubmit = (e) => {
@@ -47,7 +43,7 @@ export default function Configuracao() {
         <div className="cardProduto">
           <label htmlFor="email">Email:</label>
           <input
-            className="inputEmail" 
+            className="inputEmail"
             value={formContact.email}
             type="email"
             name="email"
