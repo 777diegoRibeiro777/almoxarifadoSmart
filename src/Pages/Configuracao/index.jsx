@@ -13,6 +13,7 @@ export default function Configuracao() {
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormContact((prevData) => ({ ...prevData, [name]: value }));
+    ("");
   };
 
   const handleSubmit = (e) => {
