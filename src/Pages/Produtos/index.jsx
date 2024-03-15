@@ -40,22 +40,20 @@ export default function Produtos() {
   const [selectedProductForDelete, setSelectedProductForDelete] =
     useState(null);
 
+  const [selectedProductForBenchmarking, setSelectedProductForBenchmarking] =
+    useState(null);
+
   function handleModalDelete(produto) {
-    console.log(produto);
     setIsOpenDelete(!modalIsOpenDelete);
     setSelectedProductForDelete(produto);
   }
 
   function handleModalEdit(produto) {
-    console.log(produto);
-
     setIsOpenEdit(!modalIsOpenEdit);
     setSelectedProductForEdit(produto);
   }
 
   const handleEmailModal = (produto) => {
-    console.log(produto);
-
     setModalIsOpenConfig(!modalIsOpenConfig);
     setSelectedProductForEmailModal(produto);
   };
@@ -72,7 +70,6 @@ export default function Produtos() {
 
   const getProducts = () => {
     API.get("/Produtos").then((response) => {
-      console.log(response.data.data);
       setProducts(response.data.data);
     });
   };
@@ -91,7 +88,6 @@ export default function Produtos() {
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormEdit((prevData) => ({ ...prevData, [name]: value }));
-    console.log("Form Data:", formEdit);
   };
 
   const handleSubmitEdit = (produto) => {
@@ -105,15 +101,13 @@ export default function Produtos() {
           handleModalEdit();
           getProducts();
         })
-        .catch((error) => {
-          console.log(error);
+        .catch(() => {
           toast.error(`Error ao editar produto ${produto.descricao}`);
         });
     }
   };
 
   const processBenchmarking = (product) => {
-    console.log(processando);
     if (processando) return;
 
     getProducts();
@@ -135,29 +129,24 @@ export default function Produtos() {
             );
           }
         })
-        .then((error) => {
-          console.log(error);
-        })
+        .then(() => {})
         .finally(() => {
           setBenchmarkingInProgress(false);
           setProcessando(false);
         });
     } else {
-      handleModalBenchmarking();
+      handleModalBenchmarking(product);
       return;
     }
   };
 
   const sendEmail = (product) => {
-    console.log(processando + "processando");
     if (processando) return;
     const dataContact = JSON.parse(localStorage.getItem("dataContact"));
-    console.log(product.id);
 
     if (statusEmail(product) == 0 && product.branchmarking != null) {
       setProcessando(true);
 
-      console.log("opa");
       API.get(
         `/Crawler/enviar-email/${product.id}?userEmail=${
           dataContact.email
@@ -165,9 +154,7 @@ export default function Produtos() {
           dataContact.whatsapp === "79988353265" ? "null" : dataContact.whatsapp
         }`
       )
-        .then((response) => {
-          console.log(response);
-
+        .then(() => {
           toast.success(
             `Sucesso ao enviar relatório do produto ${product.descricao}`
           );
@@ -179,7 +166,6 @@ export default function Produtos() {
           );
         })
         .finally(() => {
-          console.log("passou no finally");
           setProcessando(false);
         });
     } else {
@@ -197,17 +183,14 @@ export default function Produtos() {
         toast.success(`Produto ${produto.descricao} deletado`);
         handleModalDelete();
       })
-      .catch((error) => {
+      .catch(() => {
         toast.error(`Error ao tentar deletar produto ${produto.descricao} `);
-
-        console.log(error);
       });
   };
 
   const handleChangeConfig = (e) => {
     const { name, value } = e.target;
     setFormContact((prevData) => ({ ...prevData, [name]: value }));
-    console.log("Form Data:", formContact);
   };
 
   const handleSubmitConfig = (product) => {
@@ -224,17 +207,17 @@ export default function Produtos() {
       return;
     }
 
-    console.log("aqio");
-
     localStorage.setItem("dataContact", JSON.stringify(formContact));
 
-    console.log(product.id);
     sendEmail(product);
 
     handleEmailModal();
   };
 
-  const handleModalBenchmarking = () => {
+  const handleModalBenchmarking = (product) => {
+    if (!modalIsOpenBenchmarking) {
+      setSelectedProductForBenchmarking(product);
+    }
     setModalIsOpenBenchmarking(!modalIsOpenBenchmarking);
   };
 
@@ -323,45 +306,6 @@ export default function Produtos() {
                       />
                     </a>
                   </td>
-
-                  {product.branchmarking != null && (
-                    <CustomModal
-                      isOpen={modalIsOpenBenchmarking}
-                      onRequestClose={handleModalBenchmarking}
-                      title={`Relatório do produto ${product.descricao}`}
-                      content={
-                        <>
-                          <h6 className="mt-2">Loja:</h6>
-                          <span className="gray-1">
-                            {product.branchmarking.loja == 1
-                              ? "Magazine Luiza"
-                              : "Mercado Livre"}
-                          </span>
-                          <h6 className=" mt-1">Economia:</h6>
-
-                          <span className="green-normal">
-                            R${product.branchmarking.economia}
-                          </span>
-
-                          <h6 className="mt-1">Status Email:</h6>
-                          <span className="gray-1">
-                            {product.branchmarking.statusEmail == 1
-                              ? "Enviado"
-                              : "Não enviado"}
-                          </span>
-
-                          <h6 className="mt-1">Link:</h6>
-                          <a
-                            className="link-produto"
-                            target="_blank"
-                            href={product.branchmarking.link}
-                          >
-                            Produto
-                          </a>
-                        </>
-                      }
-                    />
-                  )}
                 </tr>
               ))}
           </tbody>
@@ -480,6 +424,45 @@ export default function Produtos() {
           </div>
         }
       />
+      <CustomModal
+        isOpen={modalIsOpenBenchmarking}
+        onRequestClose={handleModalBenchmarking}
+        title={`Relatório do produto ${selectedProductForBenchmarking?.descricao}`}
+        content={
+          <>
+            {selectedProductForBenchmarking && (
+              <>
+                <h6 className="mt-2">Loja:</h6>
+                <span className="gray-1">
+                  {selectedProductForBenchmarking.branchmarking.loja === 1
+                    ? "Magazine Luiza"
+                    : "Mercado Livre"}
+                </span>
+                <h6 className=" mt-1">Economia:</h6>
+                <span className="green-normal">
+                  R${selectedProductForBenchmarking.branchmarking.economia}
+                </span>
+                <h6 className="mt-1">Status Email:</h6>
+                <span className="gray-1">
+                  {selectedProductForBenchmarking.branchmarking.statusEmail ===
+                  1
+                    ? "Enviado"
+                    : "Não enviado"}
+                </span>
+                <h6 className="mt-1">Link:</h6>
+                <a
+                  className="link-produto"
+                  target="_blank"
+                  href={selectedProductForBenchmarking.branchmarking.link}
+                >
+                  Produto
+                </a>
+              </>
+            )}
+          </>
+        }
+      />
+
       {showModal && (
         <CreateProductModal
           handleShowModal={handleShowModal}
