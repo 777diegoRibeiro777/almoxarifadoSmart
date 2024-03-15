@@ -47,7 +47,7 @@ export default function Header() {
               </Link>
             </li>
             <li>
-              <Link className="nav-link" to={"/requisicao"}>
+              <Link className="nav-link" to={"https://projeto-almoxarifado-ald.vercel.app/"}>
                 Requisição
               </Link>
             </li>
