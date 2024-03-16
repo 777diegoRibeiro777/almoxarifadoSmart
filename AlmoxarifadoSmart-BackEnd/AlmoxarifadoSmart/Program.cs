@@ -80,13 +80,12 @@ var app = builder.Build();
 
 app.UseCors(policy =>
 {
-
-
-    policy.WithOrigins("*", "http://3.145.53.73:*")
+    policy.WithOrigins("*", "http://3.145.53.73", "http://3.145.53.73:8011")
           .AllowAnyMethod()
-          .AllowAnyOrigin()
-          .AllowAnyHeader().WithExposedHeaders("*");
+          .AllowAnyHeader()
+          .WithExposedHeaders("*");
 });
+
 app.UseHttpsRedirection();
 app.UseRouting();
 app.UseAuthorization();
