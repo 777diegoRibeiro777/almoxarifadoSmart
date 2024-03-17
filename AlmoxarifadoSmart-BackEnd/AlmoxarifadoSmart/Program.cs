@@ -50,22 +50,16 @@ builder.Services.AddScoped<IStoreProdutoRepository, StoreProdutoRepository>();
 builder.Services.AddControllers().AddNewtonsoftJson(x =>
  x.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
 
-
-//builder.Services.AddCors(options =>
-//{
-//    var corsOrigins = builder.Configuration.GetSection("CorsOrigins").Get<string[]>();
-
-//    options.AddDefaultPolicy(builder =>
-//    {
-//        foreach (var origin in corsOrigins)
-//        {
-//            builder.WithOrigins(origin);
-//        }
-
-//        builder.AllowAnyMethod()
-//               .AllowAnyHeader();
-//    });
-//});
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAnyOrigin",
+        builder =>
+        {
+            builder.AllowAnyOrigin()
+                   .AllowAnyMethod()
+                   .AllowAnyHeader();
+        });
+});
 
 
 var app = builder.Build();
@@ -77,14 +71,9 @@ var app = builder.Build();
     app.UseSwaggerUI();
 
 
+app.UseCors("AllowAnyOrigin");
 
-app.UseCors(policy =>
-{
-    policy.WithOrigins("*", "http://3.145.53.73", "http://3.145.53.73:8011")
-          .AllowAnyMethod()
-          .AllowAnyHeader()
-          .WithExposedHeaders("*");
-});
+
 
 app.UseHttpsRedirection();
 app.UseRouting();
